@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import Peer from "simple-peer";
 
 const SocketContext = createContext();
-const socket = io("http://localhost:5000");
+const socket = io("https://video-chat-x.herokuapp.com/");
 
 const ContextProvider = ({ children }) => {
   const [stream, setStream] = useState(null);
@@ -38,7 +38,25 @@ const ContextProvider = ({ children }) => {
   const answerCall = () => {
     setCallAccepted(true);
 
-    const peer = new Peer({ initiator: false, trickle: false, stream });
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      config: {
+        iceServers: [
+          {
+            urls: "stun:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+          {
+            urls: "turn:numb.viagenie.ca",
+            username: "sultan1640@gmail.com",
+            credential: "98376683",
+          },
+        ],
+      },
+      stream,
+    });
 
     peer.on("signal", (data) => {
       socket.emit("answercall", { signal: data, to: call.from });
