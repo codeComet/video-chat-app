@@ -39,7 +39,7 @@ const ContextProvider = ({ children }) => {
     setCallAccepted(true);
 
     const peer = new Peer({
-      initiator: false,
+      initiator: true,
       trickle: false,
       config: {
         iceServers: [
